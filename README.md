@@ -19,7 +19,7 @@ Below are some sample images demonstrating the results of our work compared to t
 ### Example 1
 
 #### Ground Truth (GT)
-![Ground Truth](/home/mplab/Projects/esa/esa/main_code/main_code/output/20240109_11_ours.png)
+![Ground Truth](20240129.png)
 
 #### Our Results
 ![Our Results](/home/mplab/Projects/esa/esa/main_code/main_code/output/20240129_11_rupnet_5classes.png)
