@@ -19,10 +19,10 @@ Below are some sample images demonstrating the results of our work compared to t
 ### Example 1
 
 #### Ground Truth (GT)
-![Ground Truth](path/to/your/ground_truth_image1.png)
+![Ground Truth](/home/mplab/Projects/esa/esa/main_code/main_code/output/20240109_11_ours.png)
 
 #### Our Results
-![Our Results](path/to/your/our_results_image1.png)
+![Our Results](/home/mplab/Projects/esa/esa/main_code/main_code/output/20240129_11_rupnet_5classes.png)
 
 ### Example 2
 
@@ -42,17 +42,6 @@ To interactively compare the Ground Truth with our results, use the sliding wind
 ### Example 2
 <iframe src="path/to/your/sliding_window_comparison2.html" width="800" height="400"></iframe>
 
-## Usage
-
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/yourusername/your-repository.git
-    ```
-2. Navigate to the project directory:
-    ```sh
-    cd your-repository
-    ```
-3. Open the `index.html` file in your browser to view the interactive sliding window comparisons.
 
 ## Citation
 
