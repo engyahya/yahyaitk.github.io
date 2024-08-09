@@ -346,12 +346,14 @@
         <div class="column is-full-width">
           <h2 class="title is-3">Method Overview</h2>
           <div class="content has-text-justified">
-            <img src="./static/images/arc.png">
+            <img src="./static/images/overflow.png">
 
-            <p><strong>Overall Framework of InstantSplat</strong>. Beginning with sparse, unposed images, we generate a pixel-wise multi-view stereo dense point cloud utilizing
-              an off-the-shelf model along with computed initial camera poses. We conduct Adaptive Dense Surface Initialization employing a voxel-wise, confidence-aware
-              point downsampler to minimize redundancy and achieve uniform sampling. A streamlined Joint Optimization process without ADC is then implemented to
-              adjust the Gaussian and camera parameters, ensuring consistency across multi-view images. All these processes are executed in a matter of seconds.</p>
+            <p><strong>The workflow of the algorithm is depicted in Figure 1, showcasing the exploration of different scenarios involving the use of image satellites. Three scenarios were examined:
+3 channels: Band 11 of Sentinel S2, NDVI (Normalized Difference Vegetation Index), and NDWIG (Normalized Difference Water Index)).
+11 channels: All 11 bands of Sentinel S2.
+13 channels: All 11 bands of Sentinel S2, along with NDVI and NDWIG indices.
+The segmentation task aims to accurately identify and delineate various water-related land cover types, such as open water surfaces, different degrees of soil waterlogging, vegetation affected by water, and atmospheric elements like clouds and shadows, utilizing imagery data captured by the Sentinel-2 satellite. The expected output is shown with each color described in the color legend map.
+</p>
 
           </div>
         </div>
