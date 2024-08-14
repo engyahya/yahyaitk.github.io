@@ -316,11 +316,11 @@
           <div class="content has-text-justified">
 
             <p>
-              While novel view synthesis (NVS) from a sparse set of images has made substantial progress in 3D computer vision, it requires an accurate initial estimation of camera parameters using Structure-from-Motion (SfM). However, SfM processes are time-consuming and prove unreliable in sparse-view scenarios where matched features are scarce. Moreover, the recent  point-based representation (3D Gaussian Splatting or 3D-GS) is substantially dependent on the precision of SfM outcomes, leading to significant accumulated errors and limited generalization capability across varied datasets. In this study, we introduce a novel and streamlined framework to enhance robust NVS from sparse-view images.
-            </p>
+              The overview should be written <strong>3 here </strong>. 
+                </p>
             <p>
-              Our framework, <strong>InstantSplat</strong>, integrates dense stereo predictions with point-based representations to construct 3D Gaussians of large-scale scenes from sparse-view data within seconds. Specifically, InstantSplat generates densely populated surface points across all training views and determines the initial camera parameters using pixel-aligned points. Nonetheless, the non-uniform distribution of initial points from all pixels results in an excessive number of Gaussians,  ielding a sub-optimal scene representation that compromises rendering speed and quality. To address this issue, we employ a highly efficient grid-based, confidence-aware Farthest Point Sampling to strategically position point primitives at representative locations in parallel. Having the uniformly sampled surface points, we can initialize densely covered Gaussians and adopt a streamlined optimization framework to adapt the camera parameters and attributes of 3D Gaussians efficiently, instead of utilizing the complex Adaptive Density Control with manually tuned hyperparameters in 3D-GS. InstantSplat achieves a substantial reduction in training time, from <u></u>hours to mere seconds</u>, and demonstrates robust performance across various numbers of views in diverse datasets.
-            </p>
+              The overview should be written <strong>3 here </strong>. 
+                </p>
 
 
           </div>
@@ -647,11 +647,11 @@ The segmentation task aims to accurately identify and delineate various water-re
   <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
-      <pre><code>@misc{fan2024instantsplat,
-        title={InstantSplat: Unbounded Sparse-view Pose-free Gaussian Splatting in 40 Seconds}, 
-        author={Zhiwen Fan and Wenyan Cong and Kairun Wen and Kevin Wang and Jian Zhang and Xinghao Ding and Danfei Xu and Boris Ivanovic and Marco Pavone and Georgios Pavlakos and Zhangyang Wang and Yue Wang},
+      <pre><code>@misc{waterdete,
+        title={Easproject}, 
+        author={Yahya and ,,,},
         year={2024},
-        eprint={2403.20309},
+        eprint={2610.1990},
         archivePrefix={arXiv},
         primaryClass={cs.CV}
       }</code></pre>
@@ -680,8 +680,7 @@ The segmentation task aims to accurately identify and delineate various water-re
             </p>
             <p>
               We thank the authors of
-              We thank the authors of <a href="https://nerfies.github.io/">Nerfies</a> that kindly open sourced the
-              template of this website.
+
             </p>
           </div>
         </div>
