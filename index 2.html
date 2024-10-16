@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smooth Image Slider with Accumulated Results</title>
+  <style>
+    * {box-sizing: border-box;}
+    body {font-family: Arial, sans-serif; margin: 0; padding: 0;}
+    
+    section {
+      padding: 20px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+
+    .slider-container {position: relative; max-width: 1000px; margin: auto;}
+    .slides {display: none; position: relative;}
+    img {width: 100%; height: auto;}
+    
+    /* Caption container */
+    .caption-container {
+      background-color: #f2f2f2;
+      padding: 15px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    /* Style for the input slider */
+    .slider {
+      width: 50%;   /* Set to 50% of the page width */
+      margin: 20px auto;
+      position: relative;
+    }
+    
+    .slider input[type="range"] {
+      width: 100%;  /* Make sure the slider itself takes up full width of the slider container */
+    }
+
+    /* Style for the slider labels */
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      width: 50%;  /* Match the width of the slider */
+      margin: 10px auto 0;
+      font-size: 14px;
+    }
+
+    .instructions {
+      text-align: center;
+      margin: 10px 0;
+      font-size: 16px;
+      color: #555;
+    }
+
+    .accumulate-button {
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .accumulate-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<section>
+  <div class="instructions">
+    Swipe the bar to explore data over time. Move left for earlier data, right for later data.
+  </div>
+
+  <div class="slider-container">
+    <!-- Slide 1 -->
+    <div class="slides">
+      <img src="images_full_BNPI/BNPI_20220208_RUPNet_first.png" alt="Landform 1">
+      <div class="caption-container">Landform 1: Data collected on January 2023</div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slides">
+      <img src="images_full_BNPI/BNPI_20220325_RUPNet_first.png" alt="Landform 2">
+      <div class="caption-container">Landform 2: Data collected on February 2023</div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slides">
+      <img src="images_full_BNPI/BNPI_20231125_RUPNet_first.png" alt="Landform 3">
+      <div class="caption-container">Landform 3: Data collected on March 2023</div>
+    </div>
+
+    <!-- Accumulated Results Slide -->
+    <div class="slides" id="accumulatedSlide">
+      <img src="images_full_BNPI/BNPI_20240129_RUPNet_blended_output.png" alt="Accumulated Results">
+      <div class="caption-container">Accumulated Results: Combined data from all months</div>
+    </div>
+
+  </div>
+
+  <!-- Range input slider for controlling the slides -->
+  <div class="slider">
+    <input type="range" min="1" max="100" value="1" class="slider-input" id="imageSlider" step="1">
+  </div>
+
+  <!-- Time labels for slider direction -->
+  <div class="slider-labels">
+    <span>Earlier</span>
+    <span>Later</span>
+  </div>
+
+  <!-- Accumulate Results Button -->
+  <button class="accumulate-button" id="accumulateButton">Show Accumulated Results</button>
+</section>
+
+<script>
+  // Initial slide index and number of slides
+  const totalSlides = document.getElementsByClassName("slides").length;
+
+  // Show the corresponding slide based on index
+  function showSlides(n) {
+    let slides = document.getElementsByClassName("slides");
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";  // Hide all slides
+    }
+    slides[n - 1].style.display = "block";  // Show the corresponding slide
+  }
+
+  // Initialize slider
+  const sliderInput = document.getElementById("imageSlider");
+  
+  // Function to map slider value to slide number (e.g., slider value 1-100 mapped to totalSlides)
+  function mapSliderValue(sliderValue) {
+    const step = 100 / (totalSlides - 1);  // Step size for each slide based on the slider's range
+    return Math.ceil(sliderValue / step);  // Calculate slide index based on slider value
+  }
+
+  // Event listener for when the slider is moved
+  sliderInput.addEventListener("input", function() {
+    const slideIndex = mapSliderValue(parseInt(sliderInput.value));
+    showSlides(slideIndex);
+  });
+
+  // Show the accumulated results slide when the button is clicked
+  document.getElementById("accumulateButton").addEventListener("click", function() {
+    showSlides(totalSlides);  // Show the last slide (accumulated results)
+  });
+
+  // Show the first slide initially
+  showSlides(1);
+</script>
+
+</body>
+</html>
