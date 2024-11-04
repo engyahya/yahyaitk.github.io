@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Image Plot</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;  /* Center items horizontally */
+            justify-content: center;  /* Center items vertically */
+            height: 100vh;  /* Full viewport height */
+            margin: 0;  /* Remove default margin */
+        }
+        img {
+            max-width: 100%;  /* Responsive image */
+            height: auto;  /* Maintain aspect ratio */
+            cursor: pointer;  /* Indicate that the image is clickable */
+        }
+        canvas {
+            margin-top: 20px;  /* Space between image and chart */
+            width: 400px;  /* Fixed width for the canvas */
+            height: 200px;  /* Fixed height for the canvas */
+        }
+    </style>
+</head>
+<body>
+    <h1>Binary Matrix Plot</h1>
+    
+    <img id="image" src="locations_005.png" alt="Image" />
+    <p id="output">Click on the image to select a pixel.</p>
+    
+    <!-- Button to trigger chart generation -->
+    <button id="generateImage">Generate Image</button>
+    
+    <!-- Canvas to display the chart -->
+    <canvas id="myChart" width="400" height="200"></canvas>  <!-- Set width and height for chart -->
+
+    <script>
+        let binaryMatrix = null;  // Initialize matrix variable
+        let selectedX = null;
+        let selectedY = null;
+        let chartInstance = null;
+
+        // Fetch the binary_matrix.json file on page load
+        async function loadBinaryMatrix() {
+            try {
+                const response = await fetch('binary_matrix.json');  // Ensure this path is correct
+                if (!response.ok) throw new Error('Failed to load binary matrix');
+                binaryMatrix = await response.json();
+                console.log('Matrix loaded successfully');
+            } catch (error) {
+                console.error('Error loading binary matrix:', error);
+            }
+        }
+
+        // Load matrix when page loads
+        window.onload = loadBinaryMatrix;
+
+        const image = document.getElementById('image');
+        const output = document.getElementById('output');
+        const generateButton = document.getElementById('generateImage');
+
+        // Event listener for image click to capture pixel coordinates
+        image.addEventListener('click', function(event) {
+            const rect = event.target.getBoundingClientRect();
+            selectedX = Math.floor((event.clientX - rect.left) / rect.width * 280);  // Assuming image width is 280
+            selectedY = Math.floor((event.clientY - rect.top) / rect.height * 360);  // Assuming image height is 360
+            
+            // Display the selected coordinates
+            output.textContent = `Selected Pixel: X = ${selectedX}, Y = ${selectedY}`;
+        });
+
+        // Function to process the selected pixel and update the chart
+        function processPixel(row, column) {
+            if (!binaryMatrix) {
+                alert('Binary matrix not loaded yet!');
+                return;
+            }
+
+            const pixelValues = binaryMatrix[row][column];  // Get values for the selected pixel
+            const onesCount = pixelValues.reduce((a, b) => a + b, 0);  // Count the number of 1s
+
+            console.log(`Total number of 1s at (${row}, ${column}): ${onesCount}`);
+
+            // If a chart already exists, destroy it before creating a new one
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            // Create or update the chart using Chart.js
+            const ctx = document.getElementById('myChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 100}, (_, i) => i),  // Slice index 0-99
+                    datasets: [{
+                        label: `Pixel Values at (${row}, ${column})`,
+                        data: pixelValues,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                    }]
+                },
+                options: {
+                    responsive: false,  // Disable responsiveness
+                    maintainAspectRatio: true,  // Maintain aspect ratio
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 1,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Generate image on button click
+        generateButton.addEventListener('click', function() {
+            if (selectedX !== null && selectedY !== null) {
+                processPixel(selectedY, selectedX);  // Pass selected coordinates
+            } else {
+                alert('Please select a pixel by clicking on the image.');
+            }
+        });
+    </script>
+</body>
+</html>
