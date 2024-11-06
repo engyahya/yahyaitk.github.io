@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-55V1E709SK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-55V1E709SK');
+  </script>
+
+  <meta charset="utf-8">
+  <meta name="description"
+    content="AI based Fusion of Satellite data for Biodiversity Change Characterization">
+  <meta name="keywords" content="AI, Satellite, Biodiversity, ESA">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI based Fusion of Satellite data for Biodiversity Change Characterization
+  </title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css//bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/script.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    
+    /* Apply this style only to a specific section */
+    .custom-body-style {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .custom-section {
+      padding: 20px;
+      background-color: #f9f9f9;
+      text-align: center;
+      max-width: 1080px;
+      margin: auto; /* Center horizontally */
+    }
+
+    .custom-slider-container { position: relative; max-width: 1080px; margin: auto; }
+    .custom-slides { display: none; position: relative; }
+    .custom-img {
+      width: 100%;
+      height: auto;
+    }
+
+    .custom-caption-container {
+      background-color: #f2f2f2;
+      padding: 15px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .custom-slider {
+      width: 100%;
+      margin: 20px auto;
+      position: relative;
+    }
+
+    .custom-slider input[type="range"] {
+      width: 100%;
+    }
+
+    .custom-slider-labels {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin: 10px auto 0;
+      font-size: 14px;
+    }
+
+    .custom-instructions {
+      text-align: center;
+      margin: 10px 0;
+      font-size: 16px;
+      color: #555;
+    }
+
+    .custom-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px auto;
+    }
+
+    .custom-accumulate-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .custom-accumulate-button:hover {
+      background-color: #0056b3;
+    }
+
+    .custom-chart-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .custom-canvas {
+      width: 50%;
+      max-width: 1060px;
+      height: 100px;
+      max-height: 250px;
+    }
+
+    #custom-output {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      margin-top: 10px;
+    }
+    .floating-image {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 100px; /* Thumbnail size */
+      height: 80px;
+      cursor: pointer;
+      transition: width 0.3s, height 0.3s;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Expanded image on hover */
+    .floating-image:hover {
+      width: 300px; /* Expanded size */
+      height: 250px;
+    }
+
+    /* Styling for the image inside */
+    .floating-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+  </style>
+
+
+</head>
+
+<body>
+
+  <!-- <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav> -->
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title"><span
+                style="color: #4CAF50 ;font-weight: bolder;">NAME_MODEL</span>: AI based Fusion of Satellite data for Biodiversity Change Characterization</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">  
+                <a href="https://scholar.google.com/citations?user=1ShbTvIAAAAJ&hl=en&oi=ao">Yahya Ibrahim</a><sup>1</sup><sup>*&dagger;</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=-azXsEwAAAAJ&hl=en">Chang Liu</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=1IrhfMcAAAAJ&hl=en">Lóránt Kovács</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=ykcDa9UAAAAJ&hl=en">Tamás Szirányi</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://www.researchgate.net/profile/Marta-Belenyesi-2">Márta Belényesi</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=5u8-lusAAAAJ&hl=en&oi=ao">Dániel Kristóf</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=aq0QsHYAAAAJ&hl=en">Csaba Benedek</a><sup>1</sup><sup>&dagger;</sup>,</span>
+              <span class="author-block">
+                
+          </div>
+
+          <!-- affiliations -->
+          <div class="subtitle is-size-5">
+          <!-- <div class="is-size-5 publication-authors"> -->
+            <sup>1</sup> HUN-REN Institute for Computer Science and Control <br>
+            <sup>2</sup> Lechner Knowledge Center &nbsp;
+            <sup>&dagger;</sup> Project Leader
+            <!-- <span class="author-block"><sup>1</sup> HUN-REN Institute for Computer Science and Control </span>
+            <span class="author-block"><sup>2</sup> Lechner Knowledge Center</span> <br>
+          </div>
+
+          <!-- TODO: update paper and video link once upload -->
+          <div class="column has-text-centered">
+            <!-- <div class="publication-links"> -->
+              <!-- PDF Link. -->
+              <span class="link-block">
+              <a href="TO_be_updated"
+                 class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                </span>
+                <span>Paper</span>
+              </a>
+              </span>
+              <span class="link-block">
+              <a href="TO_be_updated"
+                 class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                </span>
+                <span>arXiv</span>
+              </a>
+            </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="TO_be_updated" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+            <span class="link-block">
+  <a href="YOUR_DATASET_URL" class="external-link button is-normal is-rounded is-dark">
+    <span class="icon">
+      <i class="fab fa-google-drive"></i>
+    </span>
+    <span>Dataset</span>
+  </a>
+</span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="TO_be_updated"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+              </span>
+              <!-- Demo Link. -->
+              <span class="link-block">
+                <a href="https://huggingface.co/spaces/Yahyasztaki/water_flooding_1"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span>🤗 Demo</span>
+                </a>
+              </span>
+            </div>
+
+
+          <!-- Video Link. -->
+          <!-- <span class="link-block">
+                  <a href="https://youtu.be/470hul75bSM" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                    </span>
+                    <span>Video</span>
+                  </a> -->
+          </span>
+          <!-- Code Link. -->
+          <!-- <span class="link-block">
+                  <a href="https://github.com/VITA-Group/Instantsplat"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span> -->
+        </div>
+
+      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+  </section>
+
+  <div class="floating-image">
+    <img src="classes_indexs.png" alt="Floating Thumbnail">
+  </div>
+  
+
+  <section class="hero is-light is-small">
+    <div class="hero-body">
+      <div class="container">
+        <div id="results-carousel" class=" carousel results-carousel">        
+          <div class="item item-family">
+            <video poster="" id="family" autoplay controls muted loop playsinline height="100%">
+              <source src="./video.webm"
+                      type="video/webm">
+            </video>
+          </div>          
+          <div class="item item-horse">
+            <video poster="" id="horse" autoplay controls muted loop playsinline height="100%">
+              <source src="./video2.webm"
+                      type="video/webm">
+            </video>
+          </div>
+          <div class="item item-barn">
+            <video poster="" id="barn" autoplay controls muted loop playsinline height="100%">
+              <source src="./video3.webm"
+                      type="video/webm">
+            </video>
+          </div>
+          <div class="item item-ignatius">
+            <video poster="" id="ignatius" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/ignatius.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-room">
+            <video poster="" id="room" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/5c3a_3_view.mp4"
+                      type="video/mp4">
+            </video>
+
+        </div>
+        <p>The results shown are derived from <strong>3 training views</strong>. Our method estimates poses, which are then interpolated to render the video.</p>
+      </div>
+    </div>
+  </section>
+    
+
+
+
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Overview</h2>
+          <div class="content has-text-justified">
+
+            <p>
+              The overview should be written <strong>3 here </strong>. 
+                </p>
+            <p>
+              The overview should be written <strong>3 here </strong>. 
+                </p>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Concurrent Work. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Method Overview</h2>
+          <div class="content has-text-justified">
+            <img src="./images/overflow.png">
+
+            <p><strong>The workflow of the algorithm is depicted in Figure 1, showcasing the exploration of different scenarios involving the use of image satellites. Three scenarios were examined:
+3 channels: Band 11 of Sentinel S2, NDVI (Normalized Difference Vegetation Index), and NDWIG (Normalized Difference Water Index)).
+11 channels: All 11 bands of Sentinel S2.
+13 channels: All 11 bands of Sentinel S2, along with NDVI and NDWIG indices.
+The segmentation task aims to accurately identify and delineate various water-related land cover types, such as open water surfaces, different degrees of soil waterlogging, vegetation affected by water, and atmospheric elements like clouds and shadows, utilizing imagery data captured by the Sentinel-2 satellite. The expected output is shown with each color described in the color legend map.
+</p>
+
+          </div>
+        </div>
+      </div>
+      <!--/ Concurrent Work. -->
+
+    </div>
+  </section>
+
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Result</h2>
+          <div class="content has-text-justified">
+           
+            <p>We show the results for 2 case studies </p>
+
+        
+              <div class="column">
+            <div class="columns is-centered">
+              <div class="column content">
+                      <div id="examplemine" class="bal-container-small">
+
+                    <div class="bal-after">
+                      <img src="./20240129.png">
+                      <div class="bal-afterPosition afterLabel" style="z-index:1;">
+                         OURS
+                      </div>
+                    </div>
+     <div class="bal-before" style="width:75.4968152866242%;">
+                      <div class="bal-before-inset" style="width: 1024px;">
+                        <img src="./rgb.jpg">
+                        <div class="bal-beforePosition beforeLabel">
+                          Input (RGB)
+                        </div>
+                      </div>
+                    </div>
+                        
+                    <div class="bal-handle" style="left:25.4968152866242%;">
+                      <span class=" handle-left-arrow"></span>
+                      <span class="handle-right-arrow"></span>
+                    </div>
+                     
+                  </div>
+                                      <div id="examplemine2" class="bal-container-small">
+
+                    <div class="bal-after">
+                      <img src="./20240129_11_oursss.png">
+                      <div class="bal-afterPosition afterLabel" style="z-index:1;">
+                         OURS
+                      </div>
+                    </div>
+     <div class="bal-before" style="width:75.4968152866242%;">
+                      <div class="bal-before-inset" style="width: 1024px;">
+                        <img src="./test3_3.jpg">
+                        <div class="bal-beforePosition beforeLabel">
+                          Input (RGB)
+                        </div>
+                      </div>
+                    </div>
+                        
+                    <div class="bal-handle" style="left:25.4968152866242%;">
+                      <span class=" handle-left-arrow"></span>
+                      <span class="handle-right-arrow"></span>
+                    </div>
+                     
+                  </div>
+                      </div>
+      </div>
+    </div>
+          </div>
+      </div>
+    </div>
+
+  </section>
+
+
+  
+<section class=" custom-section">
+  <div class="container is-max-desktop ">
+  <div class="has-text-centered">
+    <h2 class="title is-3">Time Series</h2>
+  <div class="custom-instructions">
+    Swipe the bar to explore data over time. Move left for earlier data, right for later data.<br>
+    Click on any pixel in the image to view changes over time.
+  </div>
+
+  <div class="custom-slider-container">
+    <div class="custom-slides">
+      <img src="images_full_BNPI/BNPI_20220208_RUPNet_first.png" alt="Landform 1" class="custom-img">
+      <div class="custom-caption-container">Landform 1: Data collected on January 2023</div>
+    </div>
+
+    <div class="custom-slides">
+      <img src="images_full_BNPI/BNPI_20220325_RUPNet_first.png" alt="Landform 2" class="custom-img">
+      <div class="custom-caption-container">Landform 2: Data collected on February 2023</div>
+    </div>
+
+    <div class="custom-slides">
+      <img src="images_full_BNPI/BNPI_20231125_RUPNet_first.png" alt="Landform 3" class="custom-img">
+      <div class="custom-caption-container">Landform 3: Data collected on March 2023</div>
+    </div>
+
+    <div class="custom-slides" id="custom-accumulatedSlide">
+      <img src="images_full_BNPI/BNPI_20240129_RUPNet_blended_output.png" alt="Accumulated Results" class="custom-img">
+      <div class="custom-caption-container">Accumulated Results: Combined data from all months</div>
+    </div>
+  </div>
+
+  <div class="custom-slider">
+    <input type="range" min="1" max="100" value="1" class="custom-slider-input" id="custom-imageSlider" step="1">
+  </div>
+
+  <div class="custom-slider-labels">
+    <span>2020</span>
+    <span>2024</span>
+  </div>
+
+  <div class="custom-button-container">
+    <button class="custom-accumulate-button" id="custom-accumulateButton">Show Accumulated Results</button>
+  </div>
+
+  <div id="custom-output">Selected Pixel: (X, Y)</div>
+
+  <div class="custom-chart-container">
+    <canvas id="custom-myChart" class="custom-canvas"></canvas>
+  </div>
+
+  <div class="custom-chart-container">
+    <canvas id="custom-myChartVegetation" class="custom-canvas"></canvas>
+  </div>
+  </div>
+</div>
+
+</section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop ">
+      <div class=" has-text-centered">
+        <h2 class="title is-3">Visual Comparisons</h2>
+        <div class="content has-text-justified">
+          <p>
+
+          </p>
+        </div>
+        <div class="columns is-centered">
+          <!-- Visual Effects. -->
+          <div class="column">
+            <div class="content">
+              <div class="columns is-centered">
+                <div class="column is-full-width">
+                  <div id="example1" class="bal-container-small">
+
+                    <div class="bal-after">
+                      <img src="./locations_005.png">
+                      <div class="bal-afterPosition afterLabel" style="z-index:1;">
+                        Ours
+                      </div>
+                    </div>
+
+                    <div class="bal-before" style="width:96.4968152866242%;">
+                      <div class="bal-before-inset" style="width: 512px;">
+                        <img src="./locations_005.png">
+                        <div class="bal-beforePosition beforeLabel">
+                          CF-3DGS [Fu 2023]
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bal-handle" style="left:96.4968152866242%;">
+                      <span class=" handle-left-arrow"></span>
+                      <span class="handle-right-arrow"></span>
+                    </div>
+
+                  </div>
+
+
+                  <div id="example2" class="bal-container-small">
+
+                    <div class="bal-after">
+                      <img src="./locations_005.png">
+                      <div class="bal-afterPosition afterLabel">
+                        Ours
+                      </div>
+                    </div>
+
+                    <div class="bal-before" style="width: 50%;">
+                      <div class="bal-before-inset" style="width: 512px;">
+                        <img src="./locations_005.png">
+                        <div class="bal-beforePosition beforeLabel">
+                          Nope-NeRF [Bian 2022]
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bal-handle" style="left: 50%;">
+                      <span class=" handle-left-arrow"></span>
+                      <span class="handle-right-arrow"></span>
+                    </div>
+                  </div>
+                  <div id="example3" class="bal-container-small">
+
+                    <div class="bal-after">
+                      <img src="./locations_005.png">
+                      <div class="bal-afterPosition afterLabel">
+                        Ours
+                      </div>
+                    </div>
+
+                    <div class="bal-before" style="width: 50%;">
+                      <div class="bal-before-inset" style="width: 512px;">
+                        <img src="./locations_005.png">
+                        <div class="bal-beforePosition beforeLabel">
+                          NeRFmm [Wang 2021]
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bal-handle" style="left: 50%;">
+                      <span class=" handle-left-arrow"></span>
+                      <span class="handle-right-arrow"></span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!--/ Visual Effects. -->
+
+          <!-- Matting. -->
+          <div class="column">
+            <div class="columns is-centered">
+              <div class="column content">
+
+                <div id="example4" class="bal-container-small">
+                  <div class="bal-after">
+                    <img src="./images/20240129_3ch_RUPNet.png">
+                    <div class="bal-afterPosition afterLabel" style="z-index:1;">
+                      3ch_RUPNet
+                    </div>
+                  </div>
+
+                  <div class="bal-before" style="width:62.10191082802548%;">
+                    <div class="bal-before-inset" style="width: 512px;">
+                      <img src="./images/20240129_GT.png">
+                      <div class="bal-beforePosition beforeLabel">
+                        GT
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bal-handle" style="left:62.10191082802548%;">
+                    <span class=" handle-left-arrow"></span>
+                    <span class="handle-right-arrow"></span>
+                  </div>
+
+                </div>
+
+                <div id="example5" class="bal-container-small">
+                  <div class="bal-after">
+                    <img src="./images/20240129_11ch_RUPNet.png">
+                    <div class="bal-afterPosition afterLabel" style="z-index:1;">
+                      11ch_RUPNet
+                    </div>
+                  </div>
+
+                  <div class="bal-before" style="width:56.77179962894249%;">
+                    <div class="bal-before-inset" style="width: 512px;">
+                      <img src="./images/20240129_GT.png">
+                      <div class="bal-beforePosition beforeLabel">
+                        GT
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bal-handle" style="left:56.77179962894249%;">
+                    <span class=" handle-left-arrow"></span>
+                    <span class="handle-right-arrow"></span>
+                  </div>
+
+                </div>
+                <div id="example6" class="bal-container-small">
+                  <div class="bal-after">
+                    <img src="./images/20240129_13ch_RUPNet.png">
+                    <div class="bal-afterPosition afterLabel" style="z-index:1;">
+                      13ch_RUPNet
+                    </div>
+                  </div>
+
+                  <div class="bal-before" style="width:56.77179962894249%;">
+                    <div class="bal-before-inset" style="width: 512px;">
+                      <img src="./images/20240129_GT.png">
+                      <div class="bal-beforePosition beforeLabel">
+                        GT
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bal-handle" style="left:56.77179962894249%;">
+                    <span class=" handle-left-arrow"></span>
+                    <span class="handle-right-arrow"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    new BeforeAfter({
+      id: '#example1'
+    });
+    new BeforeAfter({
+      id: '#example2'
+    });
+    new BeforeAfter({
+      id: '#example3'
+    });
+    new BeforeAfter({
+      id: '#example4'
+    });
+    new BeforeAfter({
+      id: '#example5'
+    });
+    new BeforeAfter({
+      id: '#example6'
+    });
+    new BeforeAfter({
+      id: '#examplemine'
+    });
+    new BeforeAfter({
+      id: '#examplemine2'
+    });
+
+  const customTotalSlides = document.getElementsByClassName("custom-slides").length;
+  let customSelectedX = null;
+  let customSelectedY = null;
+  let customChartInstance, customChartInstanceVegetation;
+  let customBinaryMatrix, customBinaryMatrixVegetation;
+
+  // Fetch the binary matrix from the JSON file
+  fetch('binary_matrix_water.json')
+  .then(response => response.json())
+  .then(data => {
+    customBinaryMatrix = data; // Store the fetched data
+  })
+  .catch(error => console.error('Error fetching the binary matrix:', error));
+
+  // Fetch the binary matrix for vegetation from the JSON file
+  fetch('binary_matrix_vegetation.json')
+  .then(response => response.json())
+  .then(data => {
+    customBinaryMatrixVegetation = data; // Store the fetched data for vegetation
+  })
+  .catch(error => console.error('Error fetching the binary matrix for vegetation:', error));
+  
+
+ 
+
+
+  function customShowSlides(n) {
+    let slides = document.getElementsByClassName("custom-slides");
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+    slides[n - 1].style.display = "block";
+  }
+
+  const customSliderInput = document.getElementById("custom-imageSlider");
+
+  function customMapSliderValue(sliderValue) {
+    const step = 100 / (customTotalSlides - 1);
+    return Math.ceil(sliderValue / step);
+  }
+
+  customSliderInput.addEventListener("input", function() {
+    const slideIndex = customMapSliderValue(parseInt(customSliderInput.value));
+    customShowSlides(slideIndex);
+  });
+
+  document.getElementById("custom-accumulateButton").addEventListener("click", function() {
+    customShowSlides(customTotalSlides);
+  });
+
+  function customGenerateTimeLabels() {
+    const labels = [];
+    const startDate = new Date(2015, 0); // January 2015
+    for (let i = 0; i < 100; i++) {
+      labels.push(startDate.toLocaleDateString('en', { year: 'numeric', month: 'short' }));
+      startDate.setMonth(startDate.getMonth() + 1);
+    }
+    return labels;
+  }
+
+  function customProcessPixel(row, column) {
+    const pixelValues = customBinaryMatrix[row][column];
+
+    document.getElementById("custom-output").innerText = `Selected Pixel: (${row}, ${column})`;
+
+    if (customChartInstance) {
+      customChartInstance.destroy();
+    }
+
+    const ctx = document.getElementById('custom-myChart').getContext('2d');
+    customChartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels:  customGenerateTimeLabels(),
+        datasets: [{
+          label: `Pixel (${row}, ${column})`,
+          data: pixelValues,
+          fill: false,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        scales: {
+          x: { title: { display: true, text: 'Time' } },
+          y: { title: { display: true, text: 'Water Appearance' } }
+        }
+      }
+    });
+  }
+
+  function customProcessPixelVegetation(row, column) {
+    const pixelValues = customBinaryMatrixVegetation[row][column];
+
+    document.getElementById("custom-output").innerText = `Selected Pixel: (${row}, ${column}) `;
+
+    if (customChartInstanceVegetation) {
+      customChartInstanceVegetation.destroy();
+    }
+
+    const ctxVegetation = document.getElementById('custom-myChartVegetation').getContext('2d');
+    customChartInstanceVegetation = new Chart(ctxVegetation, {
+      type: 'line',
+      data: {
+        labels:  customGenerateTimeLabels(),
+        datasets: [{
+          label: `Pixel (${row}, ${column})`,
+          data: pixelValues,
+          fill: false,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        scales: {
+          x: { title: { display: true, text: 'Time' } },
+          y: { title: { display: true, text: 'Vegetation Appearance' } }
+        }
+      }
+    });
+  }
+
+
+  const slides = document.getElementsByClassName("custom-slides");
+  for (const slide of slides) {
+    slide.addEventListener("click", function(e) {
+      const rect = slide.getBoundingClientRect();
+      selectedX = Math.floor(e.clientX - rect.left);
+      selectedY = Math.floor(e.clientY - rect.top);
+      customProcessPixel(selectedX, selectedY);
+      customProcessPixelVegetation(selectedX, selectedY);
+    });
+  }
+
+  showSlides(1);
+
+
+
+
+  </script>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Acknowledgment</h2>
+
+        <div class="content has-text-justified">
+          <p>
+           The project was supported by ESA  Needs update
+          </p>
+         
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section> 
+
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{waterdete,
+        title={Easproject}, 
+        author={Yahya and ,,,},
+        year={2024},
+        eprint={2610.1990},
+        archivePrefix={arXiv},
+        primaryClass={cs.CV}
+      }</code></pre>
+    </div>
+  </section>
+  
+
+  <!-- TODO: update the arxiv link and github -->
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <!-- <a class="icon-link" href="">
+          <i class="fas fa-file-pdf"></i>
+        </a> -->
+        <!-- <a class="icon-link" href="" class="external-link" disabled>
+          <i class="fab fa-github"></i> -->
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <p>
+              We thank the authors of
+
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
